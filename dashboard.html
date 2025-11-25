@@ -3,81 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Web Application</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Web Application</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: Arial, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        h1 { margin-bottom: 1rem; color: #333; }
+        p { margin-bottom: 2rem; color: #666; }
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            margin: 0.5rem;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover { background: #5a6fd8; }
+    </style>
 </head>
 <body>
-    <div class="dashboard-container">
-        <header class="dashboard-header">
-            <h1>Dashboard</h1>
-            <div class="user-info">
-                <span id="userWelcome">Welcome!</span>
-                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
-            </div>
-        </header>
-        
-        <main class="dashboard-main">
-            <div class="dashboard-card">
-                <h2>Welcome to Your Dashboard</h2>
-                <p>You have successfully logged into the application.</p>
-                <div class="user-details" id="userDetails">
-                    <p>Loading user information...</p>
-                </div>
-            </div>
-            
-            <div class="dashboard-card">
-                <h3>Quick Actions</h3>
-                <div class="action-buttons">
-                    <button class="btn btn-primary">View Profile</button>
-                    <button class="btn btn-secondary">Settings</button>
-                </div>
-            </div>
-        </main>
+    <div class="container">
+        <h1>Welcome to Our Web App</h1>
+        <p>Please choose an option to continue</p>
+        <div>
+            <a href="/login" class="btn">Login</a>
+            <a href="/register" class="btn">Register</a>
+        </div>
     </div>
-
-    <script>
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            localStorage.removeItem('token');
-            window.location.href = '/login';
-        });
-
-        // Check authentication and load user data
-        window.addEventListener('load', async () => {
-            const token = localStorage.getItem('token');
-            
-            if (!token) {
-                window.location.href = '/login';
-                return;
-            }
-
-            try {
-                // Fetch user profile
-                const response = await fetch('/api/auth/profile', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                if (response.ok) {
-                    const result = await response.json();
-                    document.getElementById('userWelcome').textContent = `Welcome, ${result.user.username}!`;
-                    document.getElementById('userDetails').innerHTML = `
-                        <p><strong>Username:</strong> ${result.user.username}</p>
-                        <p><strong>Email:</strong> ${result.user.email}</p>
-                        <p><strong>Member since:</strong> ${new Date(result.user.created_at).toLocaleDateString()}</p>
-                    `;
-                } else {
-                    // Token is invalid, redirect to login
-                    localStorage.removeItem('token');
-                    window.location.href = '/login';
-                }
-            } catch (error) {
-                console.error('Error fetching user profile:', error);
-                localStorage.removeItem('token');
-                window.location.href = '/login';
-            }
-        });
-    </script>
 </body>
 </html>
-            
